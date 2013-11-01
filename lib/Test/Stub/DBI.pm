@@ -5,7 +5,6 @@ use warnings;
 use parent qw(Exporter);
 
 use Test::Mock::Guard;
-#use DBI;
 
 our $VERSION = "0.01";
 
