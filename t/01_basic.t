@@ -4,6 +4,7 @@ use warnings;
 use Test::More;
 use Test::Stub::DBI;
 use Try::Tiny;
+use DBI;
 
 subtest 'stub_sth', sub {
     my $count = 0;
@@ -38,6 +39,22 @@ subtest 'stub_dbh', sub {
         fail 'exception expected';
     } catch {
         like( $_, qr/^prepare failed/ );
+    };
+};
+
+subtest 'stub_dbi', sub {
+    my $count = 0;
+    my $guard = stub_dbi(
+        dbi => {
+            connect => sub { die "connect failed" },
+        },
+    );
+
+    try {
+        my $dbh = DBI->connect('dbd::dummy');
+        fail 'exception expected';
+    } catch {
+        like( $_, qr/^connect failed/ );
     };
 };
 

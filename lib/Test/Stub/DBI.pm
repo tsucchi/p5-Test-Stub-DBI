@@ -20,6 +20,7 @@ sub stub_dbi {
 
     my $sth_method_href = defined $stubbed_method_for{sth} ? $stubbed_method_for{sth} : {};
     my $dbh_method_href = defined $stubbed_method_for{dbh} ? $stubbed_method_for{dbh} : {};
+    my $dbi_method_href = defined $stubbed_method_for{dbi} ? $stubbed_method_for{dbi} : {};
 
     my $guard_sth = mock_guard('Test::Stub::DBI::st', {
         execute => sub {},
@@ -29,8 +30,12 @@ sub stub_dbi {
         prepare => sub { return Test::Stub::DBI::st->new() },
         %{ $dbh_method_href },
     });
+    my $guard_dbi = mock_guard('DBI', {
+        connect => \&connect,
+        %{ $dbi_method_href },
+    });
 
-    return [$guard_sth, $guard_dbh];
+    return [$guard_sth, $guard_dbh, $guard_dbi];
 }
 
 sub connect {
