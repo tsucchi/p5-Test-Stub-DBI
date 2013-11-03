@@ -1,10 +1,10 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "stub for DBI",
    "author" : [
-      "Takuya Tsuchida <takuya.tsuchida@gmail.com>"
+      "Takuya Tsuchida <tsucchi@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.8.1, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Minilla/v0.8.1, CPAN::Meta::Converter version 2.132661",
    "license" : [
       "perl_5"
    ],
@@ -53,5 +53,19 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/tsucchi/p5-Test-Stub-DBI/issues"
+      },
+      "homepage" : "https://github.com/tsucchi/p5-Test-Stub-DBI",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/tsucchi/p5-Test-Stub-DBI.git",
+         "web" : "https://github.com/tsucchi/p5-Test-Stub-DBI"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "Takuya Tsuchida <takuya.tsuchida@gmail.com>"
+   ]
 }
