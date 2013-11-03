@@ -9,7 +9,6 @@ subtest 'stub_sth', sub {
     my $count = 0;
     my $guard = stub_dbi(
         sth => {
-            execute           => sub { },
             fetchrow_arrayref => sub { 
                 $count++;
                 return [0] if ( $count == 1 );

@@ -21,9 +21,12 @@ sub stub_dbi {
     my $sth_method_href = defined $stubbed_method_for{sth} ? $stubbed_method_for{sth} : {};
     my $dbh_method_href = defined $stubbed_method_for{dbh} ? $stubbed_method_for{dbh} : {};
 
-    my $guard_sth = mock_guard('Test::Stub::DBI::st', $sth_method_href);
+    my $guard_sth = mock_guard('Test::Stub::DBI::st', {
+        execute => sub {},
+        %{ $sth_method_href },
+    });
     my $guard_dbh = mock_guard('Test::Stub::DBI::db', {
-        prepare => sub { Test::Stub::DBI::st->new() },
+        prepare => sub { return Test::Stub::DBI::st->new() },
         %{ $dbh_method_href },
     });
 
@@ -59,15 +62,29 @@ __END__
 
 =head1 NAME
 
-Test::Stub::DBI - It's new $module
+Test::Stub::DBI - stub for DBI
 
 =head1 SYNOPSIS
 
     use Test::Stub::DBI;
+    my $count = 0;
+    my $guard = stub_dbi(
+        sth => {
+            fetchrow_hashref => sub {
+                $count++;
+                return { id => 10, name => foo } if ( $count == 1 );
+                return;
+            }
+        },
+    );
+    my $dbh = Test::Stub::DBI->connect();
+    ... # call method to be tested which uses fetchrow_hashref
 
 =head1 DESCRIPTION
 
-Test::Stub::DBI is ...
+NOTE: This module is alpha quality and API may be changed in future release.
+
+Test::Stub::DBI is stub for DBI. 
 
 =head1 LICENSE
 
@@ -78,7 +95,7 @@ it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-Takuya Tsuchida E<lt>takuya.tsuchida@gmail.comE<gt>
+Takuya Tsuchida E<lt>tsucchi@cpan.orgE<gt>
 
 =cut
 
