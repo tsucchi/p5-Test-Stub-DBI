@@ -22,14 +22,9 @@ sub stub_dbi {
     my $dbh_method_href = defined $stubbed_method_for{dbh} ? $stubbed_method_for{dbh} : {};
     my $dbi_method_href = defined $stubbed_method_for{dbi} ? $stubbed_method_for{dbi} : {};
 
-    my $guard_sth = mock_guard('Test::Stub::DBI::st', {
-        execute => sub {},
-        %{ $sth_method_href },
-    });
-    my $guard_dbh = mock_guard('Test::Stub::DBI::db', {
-        prepare => sub { return Test::Stub::DBI::st->new() },
-        %{ $dbh_method_href },
-    });
+    my $guard_sth = mock_guard('Test::Stub::DBI::st', $sth_method_href);
+    my $guard_dbh = mock_guard('Test::Stub::DBI::db', $dbh_method_href);
+
     my $guard_dbi = mock_guard('DBI', {
         connect => \&connect,
         %{ $dbi_method_href },
@@ -50,12 +45,20 @@ sub new {
     bless {}, shift;
 }
 
+sub prepare {
+    return Test::Stub::DBI::st->new();
+}
+
 package Test::Stub::DBI::st;
 use strict;
 use warnings;
 
 sub new {
     bless {}, shift;
+}
+
+sub execute {
+
 }
 
 
