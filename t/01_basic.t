@@ -26,6 +26,25 @@ subtest 'stub_sth', sub {
     is( $sth->fetchrow_arrayref, undef );
 };
 
+subtest 'stub_sth with SQL statement', sub {
+    my $count = 0;
+    my $sql = 'SELECT * FROM SOME_TABLE';
+    my $guard = stub_dbi(
+        sth => {
+            execute => sub {
+                my ($self, @params) = @_;
+                $count++;
+                is( $self->{statement}, $sql );
+            },
+        },
+    );
+    my $dbh = Test::Stub::DBI->connect();
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    is( $count, 1);
+};
+
+
 subtest 'stub_dbh', sub {
     my $count = 0;
     my $guard = stub_dbi(

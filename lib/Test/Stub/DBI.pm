@@ -46,7 +46,8 @@ sub new {
 }
 
 sub prepare {
-    return Test::Stub::DBI::st->new();
+    my ($self, $statement) = @_;
+    return Test::Stub::DBI::st->new({ statement => $statement });
 }
 
 package Test::Stub::DBI::st;
@@ -54,7 +55,11 @@ use strict;
 use warnings;
 
 sub new {
-    bless {}, shift;
+    my ($class, $arg) = @_;
+    my $self = {
+        statement => $arg->{statement},
+    };
+    bless $self, $class;
 }
 
 sub execute {
