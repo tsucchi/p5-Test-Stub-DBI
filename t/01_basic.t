@@ -44,6 +44,27 @@ subtest 'stub_sth with SQL statement', sub {
     is( $count, 1);
 };
 
+subtest 'stub_sth and bind_param', sub {
+    my $count = 0;
+    my $sql = 'SELECT * FROM SOME_TABLE WHERE id IN(?, ?)';
+    my $params = [100, 200];
+    my $guard = stub_dbi(
+        sth => {
+            execute => sub {
+                my ($self, @params) = @_;
+                $count++;
+                is_deeply( $self->{params}, $params );
+            },
+        },
+    );
+    my $dbh = Test::Stub::DBI->connect();
+    my $sth = $dbh->prepare($sql);
+    $sth->bind_param(1, $params->[0]);
+    $sth->bind_param(2, $params->[1]);
+    $sth->execute();
+    is( $count, 1);
+};
+
 
 subtest 'stub_dbh', sub {
     my $count = 0;

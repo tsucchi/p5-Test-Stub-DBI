@@ -63,9 +63,15 @@ sub new {
 }
 
 sub execute {
-
+    my ($self, @params) = @_;
+    return 1;
 }
 
+sub bind_param {
+    my ($self, $num, $param, $type) = @_;
+    $self->{params}->[$num-1] = $param;
+    return 1;
+}
 
 
 1;
